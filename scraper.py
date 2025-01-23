@@ -23,6 +23,9 @@ def is_valid(url):
     # There are already some conditions that return False.
     try:
         parsed = urlparse(url)
+        if (parsed.netloc != "ics.uci.edu" and parsed.netloc != "cs.uci.edu" and parsed.netloc != "informatics.uci.edu" and parsed.netloc != "stat.uci.edu"):
+            print("oh no")
+            return False
         if parsed.scheme not in set(["http", "https"]):
             return False
         return not re.match(
@@ -38,3 +41,12 @@ def is_valid(url):
     except TypeError:
         print ("TypeError for ", parsed)
         raise
+    
+    return True
+    
+    
+# if __name__=='__main__':
+#     print(is_valid("http://google.com"))
+#     print(is_valid("https://ics.uci.edu/happening/news/?filter%5Bunits%5D=19"))
+
+
