@@ -1,8 +1,11 @@
 import re
 from urllib.parse import urlparse
+from bs4 import BeautifulSoup
 
 def scraper(url, resp):
+    word_frequency = extract_word_information(url, resp)
     links = extract_next_links(url, resp)
+    
     return [link for link in links if is_valid(link)]
 
 def extract_next_links(url, resp):
@@ -15,7 +18,18 @@ def extract_next_links(url, resp):
     #         resp.raw_response.url: the url, again
     #         resp.raw_response.content: the content of the page!
     # Return a list with the hyperlinks (as strings) scrapped from resp.raw_response.content
-    return list()
+    
+    # parse and return every link found on the page
+    parsed_content = BeautifulSoup(resp.raw_response.content, "html.parser")
+    return [link["href"] for link in parsed_content.find_all("a")]
+    
+def extract_word_information(url, resp):
+    """
+    Returns a dictionary with all the words found on the page and their frequency. 
+    Used later to find the the longest page and the 50 most common non-stop words in the entire set of pages)
+    """
+    return {}
+
 
 def is_valid(url):
     # Decide whether to crawl this url or not. 
@@ -23,8 +37,8 @@ def is_valid(url):
     # There are already some conditions that return False.
     try:
         parsed = urlparse(url)
+        print(parsed)
         if (parsed.netloc != "ics.uci.edu" and parsed.netloc != "cs.uci.edu" and parsed.netloc != "informatics.uci.edu" and parsed.netloc != "stat.uci.edu"):
-            print("oh no")
             return False
         if parsed.scheme not in set(["http", "https"]):
             return False
@@ -43,10 +57,3 @@ def is_valid(url):
         raise
     
     return True
-    
-    
-# if __name__=='__main__':
-#     print(is_valid("http://google.com"))
-#     print(is_valid("https://ics.uci.edu/happening/news/?filter%5Bunits%5D=19"))
-
-
