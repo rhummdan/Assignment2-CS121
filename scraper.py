@@ -2,10 +2,16 @@ import re
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 
+from webpage import Webpage
+
+visited_webpages = []
+
 def scraper(url, resp):
-    word_frequency = extract_word_information(url, resp)
-    links = extract_next_links(url, resp)
+    # add the webpage to the list of webpages visited
+    visited_webpages.append(Webpage(url, resp))
     
+    # extract all the links from the web page
+    links = extract_next_links(url, resp)
     return [link for link in links if is_valid(link)]
 
 def extract_next_links(url, resp):
@@ -22,14 +28,6 @@ def extract_next_links(url, resp):
     # parse and return every link found on the page
     parsed_content = BeautifulSoup(resp.raw_response.content, "html.parser")
     return [link["href"] for link in parsed_content.find_all("a")]
-    
-def extract_word_information(url, resp):
-    """
-    Returns a dictionary with all the words found on the page and their frequency. 
-    Used later to find the the longest page and the 50 most common non-stop words in the entire set of pages)
-    """
-    return {}
-
 
 def is_valid(url):
     # Decide whether to crawl this url or not. 
@@ -37,7 +35,6 @@ def is_valid(url):
     # There are already some conditions that return False.
     try:
         parsed = urlparse(url)
-        print(parsed)
         if (parsed.netloc != "ics.uci.edu" and parsed.netloc != "cs.uci.edu" and parsed.netloc != "informatics.uci.edu" and parsed.netloc != "stat.uci.edu"):
             return False
         if parsed.scheme not in set(["http", "https"]):
