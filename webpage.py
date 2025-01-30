@@ -9,9 +9,9 @@ class Webpage:
         self.word_frequencies = {}
         
         # call the method to extract word information
-        self.extract_word_information()
+        self.__extract_word_information()
         
-    def extract_word_information(self):
+    def __extract_word_information(self):
         """
         Returns a dictionary with all the words found on the page and their frequency. 
         """
