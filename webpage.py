@@ -66,19 +66,6 @@ class Webpage:
         sorted_combined_frequencies = sorted(combined_frequencies.items(), key=lambda frequency : (-frequency[1], frequency[0])) 
 
         return sorted_combined_frequencies
-    
-    def get_longest_page():
-        """
-        Gets the longest page in the entire set of pages
-        """
-        longest_page = None
-        longest_page_length = 0
-        for webpage in scraper.report.visited_webpages:
-            if webpage.word_count > longest_page_length:
-                longest_page = webpage
-                longest_page_length = webpage.word_count
-                
-        return longest_page
 
     def get_top_50_words():
         """
