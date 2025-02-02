@@ -1,11 +1,14 @@
 from bs4 import BeautifulSoup
+from collections import Counter
 import re
+import scraper
 
 class Webpage:
     def __init__(self, url, resp):
         self.url = url
         self.resp = resp
         self.tokens = []
+        self.word_count = 0
         self.word_frequencies = {}
         
         # call the method to extract word information
@@ -20,6 +23,9 @@ class Webpage:
         
         # create token list 
         self.__tokenize(parsed_page)
+
+        # compute word count
+        self.word_count = len(self.tokens)
        
         # compute frequencies
         self.__compute_word_frequencies(self.tokens)
@@ -60,7 +66,7 @@ class Webpage:
         sorted_combined_frequencies = sorted(combined_frequencies.items(), key=lambda frequency : (-frequency[1], frequency[0])) 
 
         return sorted_combined_frequencies
-    
+
     def get_top_50_words():
         """
         Gets the 50 most common words in the entire set of pages, excluding stop words
