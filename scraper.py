@@ -5,7 +5,31 @@ def scraper(url, resp):
     links = extract_next_links(url, resp)
     return [link for link in links if is_valid(link)]
 
+
+
 def extract_next_links(url, resp):
+    # Maintaining a set to make sure we don't visit same page more than once. 
+    # Keeps track of URLS (with the fragment)
+    visited_urls = set()
+
+    '''
+    # 1. unique_urls:
+        - We will need a set to keep track of the number of unique pages that we visit (A page here is considered the url without the fragment). A fragment is there to navigate you to a specific part of the webpage.
+
+    #2. longest_page:
+        - We'll also need to keep track of which of these pages is the longest in terms of words.
+        - This could just be an object with two fields: url, word count
+        - Beautiful Scope makes this really easy for us, especially since this requirement doesn't want us to exclude stop words
+
+    # 3. Top 50 Words:
+        - Maintain a hash map that keeps track of the number of occurrences of words other than stop words. After we've read all the pages, use a heap to get the top 50
+        words.
+
+    # 4. Need to implement a Tracker for ics.uci.edu domain:
+        - We can have a defaultdict(set), so that every url (https://{subdomain}.ics.uci.edu) will map to a set of unique pages within that subdomain. This set will ensure that
+        we only consider each unique page once. We will be able to use the Len of the set to get the number of unique pages within the domain:
+
+    '''
     # Implementation required.
     # url: the URL that was used to get the page
     # resp.url: the actual url of the page
