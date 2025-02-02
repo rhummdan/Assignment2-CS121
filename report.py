@@ -26,6 +26,16 @@ class Report():
         """
         report = open("report.md", "w")
         report.write("# CS 121 Assignment 2 Report: \n")
+
+        
+        # longest page section
+        report.write("## Longest Page:\n")
+        longest_page = Webpage.get_longest_page()
+        if longest_page:
+            report.write(f"Longest page is {longest_page.url} with {longest_page.word_count} words\n")
+        else:
+            report.write("No pages visited\n")
+
         
         # top 50 words section
         report.write("## Top 50 Words:\n")
